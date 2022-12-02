@@ -19,18 +19,17 @@ function Todo() {
     function handlerAdd(){
         if(text.length != 0){
             id++;
-            let arrrayAdd = [...arrayMain,{text,id}];
+            let arrrayAdd = [...arrayMain,{text,id,isComplited:false,}];
             setArray(arrrayAdd);
             setText("");
         }
     }
-    function handlerCheck(indexC,text,id){
-        let style = {textDecoration:"line-through"};
-        let arrayCheck = [...arrayMain];
-        setCheck(!check);
-        check ? (arrayCheck.splice(indexC,1,{text,id,style})) : 
-        (arrayCheck.splice(indexC,1,{text,id})); 
-        setArray(arrayCheck);
+    function handlerCheck(id){
+        arrayMain.map((e) => {
+            if(e.id == id){
+                e.isComplited = !e.isComplited;
+            }
+        })
     }
     function handlerDelete(index){
         let arrayDelete = [...arrayMain];
@@ -67,15 +66,18 @@ function Todo() {
                         return (
                             <div className='list' key={elem.id}>
                                 <h1>{elem.id}</h1>
-                                <h1 style={elem.style} >{elem.text}</h1>
+                                {
+                                    elem.isComplited ? (<s><h1 style={elem.style} >{elem.text}</h1></s>) 
+                                    : (<h1 style={elem.style} >{elem.text}</h1>) 
+                                }
                                 <div className='actions'>
-                                    <input className='btnCheckBox backRed' type="checkBox" onClick={()=>handlerCheck(index,elem.text,elem.id)}/>
-<                                button className='btnEdit' onClick={()=>handlerEdit1(index,elem.text)}>
-                                <FontAwesomeIcon icon={faPenToSquare}/>
-                                </button>
-                                <button className='btnDelete' onClick={()=>handlerDelete(index)}>
+                                    <input className='btnCheckBox backRed' type="checkBox" onClick={()=>handlerCheck(elem.id)}/>
+                                    <button className='btnEdit' onClick={()=>handlerEdit1(index,elem.text)}>
+                                    <FontAwesomeIcon icon={faPenToSquare}/>
+                                    </button>
+                                    <button className='btnDelete' onClick={()=>handlerDelete(index)}>
                                     <FontAwesomeIcon icon={faTrash}/>
-                                </button>
+                                    </button>
                                 </div>
                             </div>
                         );
